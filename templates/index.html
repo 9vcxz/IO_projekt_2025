@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konwerter Plików</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        main {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+        }
+        h2 {
+            text-align: center;
+            color: #1a1a1a;
+            margin-top: 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        label {
+            font-weight: 600;
+            margin-bottom: -0.5rem;
+        }
+        input[type="file"], select, button {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Ważne dla spójności paddingu */
+            font-size: 1rem;
+        }
+        input[type="file"] {
+            padding: 0.5rem;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        
+        /* Kontener paska postępu - zastąpiony spinnerem */
+        #progress-container {
+            display: none; /* Ukryty domyślnie */
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        /* Prosty spinner */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 1rem auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Wyniki */
+        #results {
+            margin-top: 2rem;
+        }
+        .result-item, .error-item {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .error-item {
+            background-color: #fff0f0;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .download-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <main>
+        <h2>Prototyp Konwertera Plików</h2>
+        <form id="upload-form" enctype="multipart/form-data">
+            <div>
+                <label for="files">1. Wybierz pliki (max 10MB każdy):</label>
+                <input type="file" id="files" name="files" multiple required>
+            </div>
+            
+            <div>
+                <label for="format">2. Konwertuj na format:</label>
+                <select id="format" name="format" required>
+                    <option value="" disabled selected>-- Wybierz format --</option>
+                    <optgroup label="Obrazy">
+                        <option value="jpg">JPEG (.jpg)</option>
+                        <option value="png">PNG (.png)</option>
+                        <option value="bmp">BMP (.bmp)</option>
+                    </optgroup>
+                    <optgroup label="Wideo">
+                        <option value="mp4">MP4 (.mp4)</option>
+                        <option value="avi">AVI (.avi)</option>
+                        <option value="mov">MOV (.mov)</option>
+                        <option value="flv">FLV (.flv)</option>
+                    </optgroup>
+                    <optgroup label="Audio">
+                        <option value="mp3">MP3 (.mp3)</option>
+                        <option value="wav">WAV (.wav)</option>
+                        <option value="3gp">3GP (.3gp)</option>
+                        <option value="midi">MIDI (.midi)</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <button type="submit" id="submit-btn">Konwertuj</button>
+        </form>
+
+        <div id="progress-container">
+            <p>Przetwarzanie... (To może potrwać dłuższą chwilę w przypadku wideo)</p>
+            <div class="loader"></div>
+        </div>
+
+        <div id="results"></div>
+    </main>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Zatrzymujemy domyślne wysyłanie formularza
+
+            const form = e.target;
+            const formData = new FormData(form);
+            const progressContainer = document.getElementById('progress-container');
+            const resultsDiv = document.getElementById('results');
+            const submitButton = document.getElementById('submit-btn');
+
+            // Czyszczenie wyników i pokazywanie paska postępu
+            resultsDiv.innerHTML = '';
+            progressContainer.style.display = 'block';
+            submitButton.disabled = true;
+            submitButton.textContent = 'Przetwarzanie...';
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                // Wyświetlanie błędów
+                if (data.errors && data.errors.length > 0) {
+                    data.errors.forEach(error => {
+                        const errorEl = document.createElement('div');
+                        errorEl.className = 'error-item';
+                        errorEl.textContent = error;
+                        resultsDiv.appendChild(errorEl);
+                    });
+                }
+
+                // Wyświetlanie wyników (linków do pobrania)
+                if (data.results && data.results.length > 0) {
+                    data.results.forEach(result => {
+                        const resultEl = document.createElement('div');
+                        resultEl.className = 'result-item';
+                        
+                        const textEl = document.createElement('span');
+                        textEl.textContent = `Plik: ${result.original} → ${result.converted}`;
+                        
+                        const linkEl = document.createElement('a');
+                        linkEl.href = result.download_url;
+                        linkEl.textContent = 'Pobierz';
+                        linkEl.className = 'download-btn';
+                        linkEl.download = result.converted; // Atrybut download sugeruje nazwę pliku
+
+                        resultEl.appendChild(textEl);
+                        resultEl.appendChild(linkEl);
+                        resultsDiv.appendChild(resultEl);
+                    });
+                }
+
+            } catch (error) {
+                console.error('Błąd sieciowy:', error);
+                resultsDiv.innerHTML = '<div class="error-item">Wystąpił błąd sieciowy lub błąd serwera. Sprawdź konsolę.</div>';
+            } finally {
+                // Ukrywanie paska postępu i przywracanie przycisku
+                progressContainer.style.display = 'none';
+                submitButton.disabled = false;
+                submitButton.textContent = 'Konwertuj';
+            }
+        });
+    </script>
+</body>
+</html>

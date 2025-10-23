@@ -6,15 +6,15 @@ Logo aplikacji – w górnej części interfejsu.
 
 Panel główny:
   
-  przycisk Upload – wybór pliku z dysku,
+-przycisk Upload – wybór pliku z dysku,
   
-  pole Convert to (…) – lista rozwijana z formatami,
+-pole Convert to (…) – lista rozwijana z formatami,
   
-  przycisk Ok– rozpoczęcie konwersji,
+-przycisk Ok– rozpoczęcie konwersji,
   
-  pasek postępu – wizualizacja postępu konwersji,
+-pasek postępu – wizualizacja postępu konwersji,
 
-  przycisk Download – umożliwia pobranie przekonwertowanego pliku.
+-przycisk Download – umożliwia pobranie przekonwertowanego pliku.
 
 Sekcja animacji / grafiki – mała ilustracja lub animacja po prawej stronie interfejsu (oznaczona jako „animacja” na szkicu).
 
@@ -30,4 +30,5 @@ Po kliknięciu OK, system rozpoczyna konwersję.
 Pasek postępu informuje o stanie operacji.
 
 Po zakończeniu użytkownik może pobrać wynik.
+
 

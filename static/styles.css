@@ -1,0 +1,250 @@
+/* Definicje kolorów i cieni Material Design */
+:root {
+    --primary-color: #1976D2; /* Kolor główny (głęboki niebieski) */
+    --accent-color: #FFC107; /* Kolor akcentu (żółty) */
+    --success-color: #4CAF50; /* Kolor sukcesu (zielony) */
+    --error-color: #F44336;   /* Kolor błędu (czerwony) */
+    --background-color: #e3e8ed; /* Jasne tło, aby elementy się wyróżniały */
+    --card-background: #ffffff; /* Tło kart (czysta biel) */
+    --text-color: #333;
+    --shadow-light: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    --shadow-medium: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+/* Ustawienia globalne i rozciągnięcie na całą stronę */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.main-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px; /* Mniejszy padding dla maksymalizacji przestrzeni */
+    max-width: 100%; /* Rozciągamy na całą dostępną szerokość */
+    width: 100%;
+    margin: 0 auto;
+}
+
+.conversion-content {
+    display: flex;
+    gap: 20px; /* Mniejsza przerwa między kolumnami */
+    width: 90%; /* Kontrolujemy szerokość, by nie była zbyt rozciągnięta */
+    max-width: 1400px; /* Maksymalna szerokość dla bardzo dużych ekranów */
+    justify-content: center;
+    flex-grow: 1; /* Wypełnia dostępną wysokość */
+}
+
+/* Karty */
+.card {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-medium);
+    transition: box-shadow 0.3s;
+}
+
+.conversion-panel {
+    flex: 2;
+    min-width: 450px;
+}
+
+.animation-section {
+    flex: 1;
+    min-width: 250px;
+    text-align: center;
+}
+
+.animation-placeholder {
+    margin-top: 20px;
+    padding: 30px;
+    border: 2px dashed #ccc;
+    border-radius: 4px;
+    min-height: 200px; /* Zwiększamy wysokość sekcji animacji */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #666;
+    font-size: 1em;
+}
+
+/* Elementy formularza i kontrolki */
+#upload-form > div {
+    margin-bottom: 20px;
+}
+.controls-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.file-info {
+    font-style: italic;
+    color: #666;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 5px;
+}
+
+label {
+    font-weight: 500;
+    color: #555;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.1em;
+}
+
+/* Przyciski */
+.m-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: var(--shadow-light);
+    font-size: 0.9em;
+}
+
+.m-button:hover:not(:disabled) {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.m-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.m-button.primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.m-button.accent {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+}
+
+.m-button.success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.m-button .material-icons {
+    font-size: 1.2em;
+}
+
+.m-select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+/* Sekcja Postępu i Wyników */
+#progress-container {
+    margin-top: 30px;
+    text-align: center;
+}
+.progress-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.progress-bar-container {
+    flex-grow: 1;
+    height: 10px;
+    background-color: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    transition: width 0.5s ease-in-out;
+}
+
+.progress-text {
+    font-weight: bold;
+    width: 30px;
+    text-align: right;
+}
+
+/* Wyniki */
+#results {
+    margin-top: 20px;
+}
+.result-item {
+    background-color: #f0f4f8;
+    border: 1px solid #ddd;
+    padding: 15px; /* Zwiększony padding */
+    border-radius: 4px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1em; /* Zwiększona czcionka */
+}
+.result-item span {
+    max-width: 60%; /* Ogranicza szerokość nazwy pliku */
+    word-break: break-all;
+}
+
+.error-item {
+    background-color: #ffebee;
+    border-left: 5px solid var(--error-color);
+    padding: 15px;
+    color: #333;
+    font-weight: 500;
+    margin-top: 20px; /* Oddziela błąd od reszty formularza */
+}
+
+/* Media Queries (dostosowanie do urządzeń mobilnych/małych ekranów) */
+@media (max-width: 900px) {
+    .conversion-content {
+        flex-direction: column;
+        width: 100%;
+    }
+    .conversion-panel, .animation-section {
+        min-width: unset;
+        width: 100%;
+    }
+    .controls-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .m-button.primary {
+        width: 100%;
+    }
+    .file-info {
+        text-align: center;
+        margin-top: 10px;
+    }
+}
